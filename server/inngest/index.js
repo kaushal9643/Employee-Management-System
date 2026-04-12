@@ -26,7 +26,7 @@ const autoCheckOut = inngest.createFunction(
         // send remainder email
         await sendEmail({
           to: employee.email,
-          subject: "Attendace Check-out Reminder",
+          subject: "Attendance Check-out Reminder",
           body: ` <div style="max-width: 600px;">
                     <h2>Hi ${employee.firstName}, 👋</h2>
                     <p style="font-size: 16px;">You have a check-in in ${employee.department} today:</p>
@@ -45,7 +45,8 @@ const autoCheckOut = inngest.createFunction(
         attendance = await Attendance.findById(attendanceId)
         if(!attendance?.checkOut){
             attendance.checkOut = new Date(attendance.checkIn).getTime()+4*60*60*1000;
-            attendance.workingHours = "Half Day";
+            attendance.workingHours = 4;
+            attendance.dayType = "Half Day";
             attendance.status = "LATE";
             await attendance.save()
         }
@@ -127,7 +128,7 @@ const attendanceReminderCron = inngest.createFunction(
     })
 
     // Step 5: Filter absent employees (not on Leave & not Checked in)
-    const absentEmployees = activeEmployees.filter((emp)=>!onLeaveIds.includes(emp._id) && !checkInIds.includes(emp._id))
+    const absentEmployees = activeEmployees.filter((emp)=>!onLeaveIds.includes(emp._id) && !checkedInIds.includes(emp._id))
 
     // Step 6: Send reminder emails
     if(absentEmployees.length > 0){
@@ -135,7 +136,7 @@ const attendanceReminderCron = inngest.createFunction(
         const emailPromises = absentEmployees.map((emp)=>{
           // send email
           sendEmail({
-            to: employee.email,
+            to: emp.email,
             subject: "Attendance Reminder - Please Mark Your Attendance",
             body: `<div style="max-width: 600px; font-family: Arial, sans-serif;">
                                 <h2>Hi ${emp.firstName}, 👋</h2>
