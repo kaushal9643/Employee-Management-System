@@ -17,6 +17,8 @@ const app = express();
 
 const PORT = process.env.PORT || 4000;
 
+await connectDB()
+
 // middleware
 app.use(cors());
 app.use(express.json())
@@ -34,6 +36,5 @@ app.use("/api/dashboard", dashboardRouter)
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
-await connectDB()
 
 app.listen(PORT, ()=> console.log(`Server running on port ${PORT}`))
