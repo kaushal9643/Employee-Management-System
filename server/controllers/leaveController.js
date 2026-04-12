@@ -1,6 +1,6 @@
 import { inngest } from "../inngest/index.js";
 import Employee from "../models/Employee.js";
-import LeaveApplication from "../models/leaveApplication.js";
+import LeaveApplication from "../models/LeaveApplication.js";
 
 // Create leave
 // POST /api/leaves

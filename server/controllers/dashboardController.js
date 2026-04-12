@@ -1,7 +1,7 @@
 import { DEPARTMENTS } from "../constants/departments.js";
 import Attendance from "../models/Attendance.js";
 import Employee from "../models/Employee.js";
-import LeaveApplication from "../models/leaveApplication.js";
+import LeaveApplication from "../models/LeaveApplication.js";
 
 // get dashboard for employee/admin
 // get api/dashboard
