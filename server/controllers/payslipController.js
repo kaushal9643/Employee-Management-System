@@ -16,11 +16,14 @@ export const createPayslip = async (req, res) => {
             month: Number(month),
             year: Number(year),            
             basicSalary: Number(basicSalary),            
-            allowances: Number(allowances || 0),            
+            allowances: Number(allowances || 0),   
+            deductions: Number(deductions || 0),         
             netSalary,
         })
         return res.json({success: true, data: payslip})
     } catch (error) {
+        console.log(error);
+        
         return res.status(500).json({error: "Failed"})   
     }
 }
@@ -34,7 +37,7 @@ export const getPayslips = async (req, res) => {
             const payslip = await Payslip.find().populate("employeeId").sort({createdAt: -1});
 
             const data = payslip.map((p)=>{
-                const obh = p.toObject();
+                const obj = p.toObject();
                 return{
                     ...obj,
                     id: obj._id.toString(),

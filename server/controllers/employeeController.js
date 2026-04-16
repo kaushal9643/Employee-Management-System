@@ -10,9 +10,9 @@ export const getEmployees = async (req, res) => {
         const where = {};
         if (department) where.department = department;
 
-        const employees = (await Employee.find(where)).toSorted({createdAt: -1}).populate("userId", "email role").lean();
+        const employees = await Employee.find(where).sort({createdAt: -1}).populate("userId", "email role").lean();
 
-        const result = employees.map((map)=>({
+        const result = employees.map((emp)=>({
             ...emp,
             id: emp._id.toString(),
             user: emp.userId ? {email: emp.userId.email, role: emp.userId.role} : null
@@ -55,7 +55,7 @@ export const createEmployee = async (req, res) => {
             bio: bio || "",
         })
 
-        return res.Status(201).json({sucess: true, employee})
+        return res.status(201).json({sucess: true, employee})
     } catch (error) {
         if(error.code === 11000){
             return res.status(400).json({error: "Email already exists"})
@@ -73,7 +73,7 @@ export const updateEmployee = async (req, res) => {
 
         const {firstName, lastName, email, phone, position, department, basicSalary, allowances, deductions, password, role, bio, employmentStatus} = req.body;
 
-        const employee = await Employee.findByID(id);
+        const employee = await Employee.findById(id);
         if(!employee) return res.status(404).json({error: "Employee not found"})
 
         await Employee.findByIdAndUpdate(id, {
@@ -117,7 +117,7 @@ export const deleteEmployee = async (req, res) => {
         if(!employee) return res.status(404).json({error: "Employee not found"})
 
         employee.isDeleted = true;
-        employee.employmentStatus = "INACTIVE"
+        employee.employeeStatus = "INACTIVE"
         await employee.save();
 
         return res.json({success: true})

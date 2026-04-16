@@ -1,5 +1,7 @@
 import { Loader2Icon, PlusIcon, X } from "lucide-react"
 import { useState } from "react"
+import api from "../../api/axios"
+import toast from "react-hot-toast"
 
 const GeneratePayslipForm = ({ employees, onSuccess }) => {
     const [isOpen, setIsOpen] = useState(false)
@@ -13,6 +15,17 @@ const GeneratePayslipForm = ({ employees, onSuccess }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setLoading(true)
+        const formData = new FormData(e.currentTarget)
+        const data = Object.fromEntries(formData.entries())
+        try {
+            await api.post('/payslips', data)
+            setIsOpen(false)
+            onSuccess()
+        } catch (err) {
+            toast.error(err.response?.data?.error || err?.message)
+        }
+        setLoading(false)
     }
     return (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -29,7 +42,7 @@ const GeneratePayslipForm = ({ employees, onSuccess }) => {
                         <label className="block text-sm font-medium text-slate-700 mb-2">Employee</label>
                         <select name="employeeId" required>
                             {employees.map((e) => (
-                                <option value="e.id" key={e.id}>
+                                <option value={e.id} key={e.id}>
                                     {e.firstName} {e.lastName} ({e.position})
                                 </option>
                             ))}
@@ -44,7 +57,7 @@ const GeneratePayslipForm = ({ employees, onSuccess }) => {
                             </label>
                             <select name="month">
                                 {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-                                    <option key={m} value="m">
+                                    <option key={m} value={m}>
                                         {m}
                                     </option>
                                 ))}

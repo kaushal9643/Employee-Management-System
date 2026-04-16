@@ -14,7 +14,7 @@ export const createLeave = async (req, res) => {
             return res.status(403).json({error: "Your account is deactivated. You cannot apply for leave."})
         }
 
-        const [type, startDate, endDate, reason] = req.body
+        const {type, startDate, endDate, reason} = req.body
 
         if(!type || !startDate || !endDate || !reason){
             return res.status(400).json({error: "Missing fields"});
@@ -39,10 +39,10 @@ export const createLeave = async (req, res) => {
             status: "PENDING",
         })
 
-        await inngest.send({
-            name: "leave/pending",
-            data: {leaveApplicationId: leave._id}
-        })
+        // await inngest.send({
+        //     name: "leave/pending",
+        //     data: {leaveApplicationId: leave._id}
+        // })
 
         return res.json({success: true, data: leave});
     } catch (error) {

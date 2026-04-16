@@ -2,12 +2,14 @@ import { DEPARTMENTS } from "../constants/departments.js";
 import Attendance from "../models/Attendance.js";
 import Employee from "../models/Employee.js";
 import LeaveApplication from "../models/LeaveApplication.js";
+import Payslip from "../models/Payslip.js";
 
 // get dashboard for employee/admin
 // get api/dashboard
 export const getDashboard = async (req, res) => {
     try {
         const session = req.session;
+    
         if(session.role === "ADMIN"){
             const [totalEmployees, todayAttendance, pendingLeaves] = await Promise.all([
                 Employee.countDocuments({isDeleted: {$ne: true}}),
@@ -40,7 +42,7 @@ export const getDashboard = async (req, res) => {
                         $gte: new Date(today.getFullYear(), today.getMonth(), 1),
                         $lt: new Date(today.getFullYear(), today.getMonth()+1, 1),
                     }
-                }).
+                }),
                 LeaveApplication.countDocuments({
                     employeeId: employee._id,
                     status: "PENDING",

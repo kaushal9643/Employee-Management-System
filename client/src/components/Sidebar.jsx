@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { dummyProfileData } from "../assets/assets"
-import { CalendarIcon, ChevronRightIcon, DollarSignIcon, FileTextIcon, LayoutGridIcon, LogOutIcon, MenuIcon, SettingsIcon, UserIcon, XIcon } from "lucide-react"
+import { CalendarIcon, ChevronRightIcon, DollarSignIcon, FileTextIcon, LayoutGridIcon, Loader2, LogOutIcon, MenuIcon, SettingsIcon, UserIcon, XIcon } from "lucide-react"
+import { useAuth } from "../context/AuthContext"
+import api from "../api/axios"
 
 const Sidebar = () => {
     const { pathname } = useLocation()
     const [userName, setUserName] = useState("")
     const [mobileOpen, setMobileOpen] = useState(false)
 
+    const {user, loading, logout} = useAuth()
+
     useEffect(() => {
-        setUserName(dummyProfileData.firstName + " " + dummyProfileData.lastName)
+        api.get("/profile").then(({data})=>{
+            if(data.firstName) setUserName(`${data.firstName} ${data.lastName || ""}`.trim())
+        })
     }, [])
 
     // close mobile sidebar on route change
@@ -17,7 +23,7 @@ const Sidebar = () => {
         setMobileOpen(false)
     }, [pathname])
 
-    const role = "" || "EMPLOYEE";
+    const role = user?.role;
     const navItems = [
         {name: "Dashboard", href: "/dashboard", icon: LayoutGridIcon},
         role === "ADMIN" ?
@@ -29,6 +35,7 @@ const Sidebar = () => {
     ]
 
     const handleLogout = ()=>{
+        logout()
         window.location.href = "/login"
     }
     const sidebarContent = (
@@ -55,7 +62,7 @@ const Sidebar = () => {
                     <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center ring-1 ring-white/10 shrink-0">
                             <span className="text-slate-400 text-xs font-semibold">
-                                {userName.charAt(0).toUpperCase}
+                                {userName.charAt(0).toUpperCase()}
                             </span>
                         </div>
 
@@ -75,7 +82,13 @@ const Sidebar = () => {
             {/* navigation list */}
 
             <div className="flex-1 px-3 space-y-0.5 overflow-y-auto">
-                {navItems.map((item)=>{
+                {loading ? (
+                    <div className="px-3 py-3 flex items-center gap-2 text-slate-500">
+                        <Loader2 className="animate-spin w-4 h-4"/>
+                        <span className="text-sm">Loading...</span>
+                    </div>
+                ) : (
+                    navItems.map((item)=>{
                     const isActive = pathname.startsWith(item.href)
                     return (
                         <Link key={item.name} to={item.href} className={`group flex items-center gap-3 px-3 py-2.5 rounded-md text-[13px] font-medium transition-all duration-150 relative ${isActive ? "bg-indigo-500/12 text-indigo-300" : "text-slate-300 hover:text-white hover:bg-white/4"}`}>
@@ -85,7 +98,9 @@ const Sidebar = () => {
                             {isActive && <ChevronRightIcon className="w-3.5 h-3.5 text-indigo-500/50"/>}
                         </Link>
                     )
-                })}
+                })
+                )}
+                
             </div>
 
             {/* logout */}

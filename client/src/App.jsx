@@ -19,6 +19,7 @@ const App = () => {
         <Route path='/login' element={<LoginLanding />} />
 
         <Route path='/login/admin' element={<LoginForm role='admin' title='Admin Portal' subtitle='Sign in to manage the organization'/>} />
+
         <Route path='/login/employee' element={<LoginForm role='employee' title='Employee Portal' subtitle='Sign in to access your account'/>} />
 
 
@@ -31,6 +32,7 @@ const App = () => {
           <Route path='/settings' element={<Settings />} />
         </Route>
         <Route path='/print/payslips/:id' element={<PrintPayslip />} />
+
         <Route path='*' element={<Navigate to='/dashboard' replace />} />
       </Routes>
     </>

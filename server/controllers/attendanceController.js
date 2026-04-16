@@ -29,17 +29,17 @@ export const clockInOut = async (req, res) => {
                 employeeId: employee._id,
                 date: today,
                 checkIn: now,
-                status: isLate ? "Late" : "PRESENT"
+                status: isLate ? "LATE" : "PRESENT"
             })
 
-            await inngest.send({
-                name:"Employee/check-out",
-                data: {
-                    employeeId: employee._id,
-                    attendanceId: attendance._id,
-                }
-            })
-            return res.json({success: true, type: "CHECK_IN", date: attendance});
+            // await inngest.send({
+            //     name:"employee/check-out",
+            //     data: {
+            //         employeeId: employee._id,
+            //         attendanceId: attendance._id,
+            //     }
+            // })
+            return res.json({success: true, type: "CHECK_IN", data: attendance});
         }else if(!existing.checkOut){
             const checkInTime = new Date(existing.checkIn).getTime()
             const diffMs = now.getTime()-checkInTime;
@@ -69,7 +69,7 @@ export const clockInOut = async (req, res) => {
     }
 }
 // Get attendance for employee
-// POST /api/attendance
+// get /api/attendance
 export const getAttendance = async (req, res) => {
     try {
         const session = req.session;
