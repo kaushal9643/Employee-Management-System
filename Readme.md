@@ -115,33 +115,43 @@ cd ../server
 npm install
 ```
 
-3. **Create .env files**
-- Client (client/.env)
-```
+### 3️⃣ Create .env files
+
+#### Client (client/.env)
+```env
 VITE_BASE_URL="http://localhost:4000"
 ```
-- Server (server/.env)
-```
+
+#### Server (server/.env)
+```env
 PORT=4000
 MONGO_URI=your_mongodb_connection
 JWT_SECRET=your_secret
 ADMIN_EMAIL=your_admin_email
 INNGEST_EVENT_KEY=your_event_key
-INNGEST_SIGNING_KEY=you_signing_key
+INNGEST_SIGNING_KEY=your_signing_key
 SMTP_USER=your_email
 SMTP_PASS=your_password
 SENDER_EMAIL=sender_email
 ```
-## Deployment 🌐
+---
 
-The frontend and backend can be deployed on **Vercel** or any cloud hosting platform.  
+## 🚀 Deployment
 
-## Live Demo 🌐
+- Frontend deployed on **Vercel**
+- Backend deployed on any Node.js supported platform (Render / Railway / VPS)
 
-Check out the app here: [EMS Live Demo](https://employee-management-system-theta-coral.vercel.app/login)
- -->
+---
 
-### 📌 Notes
+## 🌐 Live Demo
+
+Check out the app here:  
+👉 https://employee-management-system-theta-coral.vercel.app/login
+
+---
+
+## 📌 Notes
+
 - Inngest automation is implemented but currently disabled in production.
 - Session-based authentication is used (Express Session).
 - Ensure MongoDB is running before starting the backend.
