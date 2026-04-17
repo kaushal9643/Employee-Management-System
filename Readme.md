@@ -98,15 +98,19 @@ A full-stack Employee Management System built using the MERN stack that allows o
 
 ```bash
 git clone https://github.com/kaushal9643/Employee-Management-System
-cd employee-management-system
+cd Employee-Management-System
+```
 
-2. **Install dependencies**
-- Frontend
+### 2️⃣ Install dependencies
 
+#### Frontend
+```bash
 cd client
 npm install
+```
 
-- Backend
+#### Backend
+```bash
 cd ../server
 npm install
 ```
@@ -122,8 +126,8 @@ PORT=4000
 MONGO_URI=your_mongodb_connection
 JWT_SECRET=your_secret
 ADMIN_EMAIL=your_admin_email
-INGEST_EVENT_KEY=your_event_key
-INGEST_SIGNING_KEY=you_signing_key
+INNGEST_EVENT_KEY=your_event_key
+INNGEST_SIGNING_KEY=you_signing_key
 SMTP_USER=your_email
 SMTP_PASS=your_password
 SENDER_EMAIL=sender_email
@@ -136,3 +140,8 @@ The frontend and backend can be deployed on **Vercel** or any cloud hosting plat
 
 Check out the app here: [EMS Live Demo](https://employee-management-system-theta-coral.vercel.app/login)
  -->
+
+### 📌 Notes
+- Inngest automation is implemented but currently disabled in production.
+- Session-based authentication is used (Express Session).
+- Ensure MongoDB is running before starting the backend.
